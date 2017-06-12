@@ -1,7 +1,7 @@
 language: node_js
 node_js:
 - '7.10'
-after_success:
+before_script:
     - npm install -g bower
     - npm install -g gulp-cli
     - npm install --save-dev gulp
