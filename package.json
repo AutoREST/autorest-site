@@ -19,7 +19,6 @@
     "request": "2.81.0"
   },
   "scripts": {
-    "postinstall": "bower install && gulp",
     "start": "node main.js"
   },
   "devDependencies": {
