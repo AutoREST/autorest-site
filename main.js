@@ -9,7 +9,7 @@ var app = express();
 // var updater = require('./bin/updater');
 // var uploader = require('./uploader');
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 app.use(cookieParser())
 app.use(session({

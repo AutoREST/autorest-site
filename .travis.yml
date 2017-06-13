@@ -6,6 +6,8 @@ install:
 - npm install -g bower
 - npm install -g gulp-cli
 - npm install --save-dev gulp
+- bower install
+- gulp
 deploy:
   provider: heroku
   api_key:
