@@ -19,7 +19,7 @@
     "request": "2.81.0"
   },
   "scripts": {
-    "start": "node main.js"
+    "start": "ls && node main.js"
   },
   "devDependencies": {
     "gulp": "3.9.1"
