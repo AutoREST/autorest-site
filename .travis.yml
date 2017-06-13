@@ -2,7 +2,14 @@ language: node_js
 node_js:
 - '7.10'
 install:
-    - npm install
-    - npm install -g bower
-    - npm install -g gulp-cli
-    - npm install --save-dev gulp
+- npm install
+- npm install -g bower
+- npm install -g gulp-cli
+- npm install --save-dev gulp
+deploy:
+  provider: heroku
+  api_key:
+    secure: edGktbpK2vRKGDP1ipA6xJDS6KngfrIEWYZXM2atppeW/Ct5/DzL9APENznCpaDrjRvkgLrnXBQB/8XwingfzxR1aDtxn+S6NVNFLjzg4TVMVIcm7E6ZBOIW/5UTytgKQ/6l8iabqunxXI1GlOsvsv4QKLdd0SCxjx8lKeWUWVYOAZebq+0U/eS/3nueS3QTUKfk+pwRKndVGBAZedZ99AaPiiCmViCBn6/TTuv8DFyy0txadkjOzIMVbtHr+J0MK0MJuGm8AQp0jPzaDhmCGCmVk/lakpzQoy95S3KSdDuwesUmSX26m2MmGFuI8HU5xrfh133cUwEAzDDdh46cXh0xAtQIrPikuVgtMGOZyqLDvd3vIKdNAsoYTs3hwOjF4kuludqF+YHXlceeBfcWHkpRrt3kmbYNIJHEU6XJIG140585f0H0hdnnyi0coJMeZ39iSQJ+JOx/x3e9M9q4sz/W6H45SM2sL0XM7lBf+l4ep5gOCJJdjxMRfZJGoMzVuTGIq7kQkIzFMGwsHw3mjeP4NGxA7GOdaBQBPNfsXpNFfxeKCElzH8UK3Uwds+/RuCCEJiZynoIro55cpfnrn//gim6VW3gkXvwqZ95UYEPb2gWi/lohHH0sPUaJcDZApvLPPFd+dMpKXKh2Pk6640slRMPg71U3BLfpkBUwXHc=
+  app: autorest-site
+  on:
+    repo: AutoREST/autorest-site
