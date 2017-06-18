@@ -1,0 +1,27 @@
+include basic.pug
+body(ng-app="modSiteApp" ng-controller="orderController")
+	div.container
+		h2 API Order
+		label ID:
+		span #{order._id}
+		br
+		label API Name:
+		span #{order.APIName}
+		br
+		label Status:
+		span #{order.statusText}
+		br
+		if order.xmlPath
+			- url = `/order/xml/${order._id}`
+			- fileName = order.xmlFileName
+			a.btn.btn-success(href=url,download=fileName) Download XML file
+		if order.jsonPath
+			- url = `/order/json/${order._id}`
+			- fileName = order.jsonFileName
+			a.btn.btn-success(href=url,download=fileName) Download JSON file
+		if order.zipPath
+			- url = `/order/zip/${order._id}`
+			- fileName = order.zipFileName
+			a.btn.btn-success(href=url,download=fileName) Download Generated API
+		br
+		a.btn.btn-info(href="/order") All orders

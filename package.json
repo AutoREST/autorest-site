@@ -5,6 +5,8 @@
   "main": "main.js",
   "author": "AutoREST",
   "license": "MIT",
+  "repository": "https://github.com/AutoREST/autorest-site",
+  "description": "Website for the AutoREST tool",
   "dependencies": {
     "body-parser": "1.17.2",
     "cookie-parser": "1.4.3",
@@ -17,6 +19,8 @@
     "method-override": "2.3.9",
     "mongoose": "4.10.4",
     "morgan": "1.8.2",
+    "node-cron": "^1.2.0",
+    "pug": "^2.0.0-rc.2",
     "request": "2.81.0"
   },
   "scripts": {

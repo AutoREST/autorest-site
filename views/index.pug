@@ -1,0 +1,25 @@
+include basic.pug
+body(ng-app="modSiteApp" ng-controller="siteAppController")
+	div.container
+		h1(style="text-align: center") Welcome to AutoREST
+		form
+			div.form-group
+				label API Name
+				input.form-control(type="text" ng-model="options.APIName")
+			div.form-group
+				label Data Base name
+				input.form-control(type="text" ng-model="options.DataBaseName")
+			div.form-group
+				label API repository URL
+				input.form-control(type="text" ng-model="options.APIRepoURL")
+			div.form-group
+				label Source File
+				input(type="file" fileread="sourceFile")
+			button.btn.btn-success(ng-model="sendBtn" ng-click="createApiRequest()") Create API Request
+			a.btn.btn-info(href="/order") All orders
+		div.panel
+			div.alert.alert-dismissible(ng-class="alert.class" ng-repeat="alert in alerts track by $index")
+				button(type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert(alert)")
+					span(aria-hidden="true") &times;
+				strong {{alert.title}} &nbsp;
+				span(ng-bind-html="alert.text")

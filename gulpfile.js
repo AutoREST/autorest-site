@@ -3,6 +3,11 @@ var del = require('del');
 
 var buildDir = 'build/Release/';
 
+gulp.task('client', function() {
+	var stream = gulp.src(['./client/**/*.js'])
+	.pipe(gulp.dest(buildDir));
+	return stream;
+});
 gulp.task('jquery', function() {
 	var stream = gulp.src('./bower_components/jquery/dist/*.js')
 	.pipe(gulp.dest(buildDir + 'js/jquery'));
@@ -26,4 +31,4 @@ gulp.task('bootstrap', function() {
 gulp.task('clean', function() {
 	return del([buildDir]);
 })
-gulp.task('default', ['jquery', 'angular-js', 'angular-css', 'bootstrap']);
+gulp.task('default', ['client', 'jquery', 'angular-js', 'angular-css', 'bootstrap']);
