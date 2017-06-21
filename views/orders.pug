@@ -8,7 +8,7 @@ body(ng-app="modSiteApp" ng-controller="ordersController")
 				th API Name
 				th Status
 				th &nbsp;
-				th &nbsp;
+				//- th &nbsp;
 				th &nbsp;
 			each order in orders
 				tr
@@ -19,12 +19,12 @@ body(ng-app="modSiteApp" ng-controller="ordersController")
 						- url = order.downloadLatest
 						- fileName = order.fileName
 						a.btn.btn-success(href=url,download=fileName) Download
-					if order.forceNext
-						td
-							- url = order.forceNext
-							a.btn.btn-success(href=url) Execute next phase
-					else
-						td &nbsp;
+					//- if order.forceNext
+					//- 	td
+					//- 		- url = order.forceNext
+					//- 		a.btn.btn-success(href=url) Execute next phase
+					//- else
+					//- td &nbsp;
 					td
 						- url = `/order/${order._id}`
 						a.btn.btn-info(href=url) More info

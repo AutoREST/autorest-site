@@ -46,18 +46,23 @@ app.use(order);
 app.get('/', function (req, res) {
 	res.render('index');
 });
-/*
 var executionCore = require('./bin/executionCore');
 executionCore.setStageFolder(resultsPath);
-app.get('/run/rest-api-generator', function(req, res) {
-	var reqId = uuid();
-	var inputJSON = path.join(__dirname,'bin', 'advanced.json');
-	var inputOptions = '';
-	executionCore.executeRestApiGenerator(reqId, inputJSON, inputOptions, function(err, apiPath) {
-		if(err) res.status(500).send(err);
-		else res.send(apiPath);
-	});
+executionCore.startTasks();
+app.post('/reset-crons', function(req, res) {
+	try {
+		var options = {};
+		if(req.body.parserCron)
+			options.parserCron = req.body.parserCron;
+		if(req.body.generatorCron)
+			options.generatorCron = req.body.generatorCron;
+		executionCore.refreshCrons(options);
+		res.status(200).send();
+	} catch (e) {
+		res.status(500).send();
+	}
 });
+/*
 var updateOptions = {
     userAgent: 'lasaro-dumer',
     binaries: new Map()
