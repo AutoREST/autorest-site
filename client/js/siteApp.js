@@ -121,23 +121,19 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 	$scope.generateApiBlock = function(item) {
 		// Block the user interface
 		blockUI.start('Generating your API');
-		// $timeout(function () {
-		// 	console.log('stoping');
-		// 	blockUI.stop();
-		// }, 1000);
-		//
 		//this function was heavily based on one in angular-file-upload
 		var xhr = new XMLHttpRequest();
 		var sendable = new FormData();
 		if(typeof(item.file.size) != 'number') {
 			$scope.addAlert($scope.classes.error, 'The file specified is no longer valid');
+			return;
 		}
 		sendable.append('options', JSON.stringify($scope.options));
 		sendable.append(item.alias, item.file, item.file.name);
 
 		xhr.upload.onprogress = (event) => {
-			var progress = Math.round(event.lengthComputable ? event.loaded * 100 / event.total : 0);
-			$scope.$apply(function(){$scope.addAlert($scope.classes.info, `Upload progress: ${progress}%`)});
+			// var progress = Math.round(event.lengthComputable ? event.loaded * 100 / event.total : 0);
+			// $scope.$apply(function(){$scope.addAlert($scope.classes.info, `Upload progress: ${progress}%`)});
 		};
 
 		xhr.onload = () => {
@@ -145,7 +141,7 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 				var headers = $scope._parseHeaders(xhr.getAllResponseHeaders());
 				var response = $scope._transformResponse(xhr.response, headers);
 				var url = $window.location.origin + response.url;
-				$scope.downloadURI(url, 'generateAPI.zip');
+				$scope.downloadURI(url, `${$scope.options.APIName}.zip`);
 			}
 			else {
 				$scope.$apply(function(){$scope.addAlert($scope.classes.error, xhr.response)});
@@ -158,7 +154,7 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 		};
 
 		xhr.onabort = () => {
-			blockUI.stop();
+			$scope.$apply(function(){blockUI.stop();});
 			$scope.$apply(function(){$scope.addAlert($scope.classes.info, xhr.response, 'Aborted')});
 		};
 
