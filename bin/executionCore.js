@@ -191,8 +191,8 @@ function ExecutionCore() {
 		this.startTasks();
 	}
 
-	this.createTasks();
-	this.startTasks();
+	// this.createTasks();
+	// this.startTasks();
 }
 
 util.inherits(ExecutionCore, events.EventEmitter);
