@@ -85,7 +85,7 @@ function ExecutionCore() {
 	var queryAndExecuteParser = function() {
 		if(!parserBusy){
 			if(!fs.existsSync(parserJarPath))
-				return console.log(`JAR ${parserJarPath} not available`);
+				return console(`JAR ${parserJarPath} not available`);
 			parserBusy = true;
 			var pending = 0;//it's silly, but will do the work :)
 			if(logsEnabled) console.log('querying and executing parser');

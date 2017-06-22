@@ -10,11 +10,14 @@ var mongoose = require('mongoose');
 
 var uploadsPath = path.join(__dirname, 'stage','uploads');
 var resultsPath = path.join(__dirname, 'stage','results');
+var generationPath = path.join(__dirname, 'stage','generation');
 
 var app = express();
 // var updater = require('./bin/updater');
 var order = require('./routers/order');
 order.setStageFolder(uploadsPath);
+var execution = require('./routers/execution');
+execution.setStageFolder(generationPath);
 
 var port = process.env.PORT || 3000;
 var connection_string = process.env.DATABASE || 'mongodb://localhost/autorestDB';
@@ -43,9 +46,11 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname,'build','Release')));
 app.use(order);
+app.use(execution);
 app.get('/', function (req, res) {
 	res.render('index');
 });
+/*
 var executionCore = require('./bin/executionCore');
 executionCore.setStageFolder(resultsPath);
 executionCore.startTasks();
@@ -62,6 +67,7 @@ app.post('/reset-crons', function(req, res) {
 		res.status(500).send();
 	}
 });
+//*/
 /*
 var updateOptions = {
     userAgent: 'lasaro-dumer',

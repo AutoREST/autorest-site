@@ -19,6 +19,7 @@
     "angular-bootstrap": "2.5.0",
     "bootstrap": "3.3.7",
     "jquery": "3.2.1",
-    "angular-sanitize": "1.6.4"
+    "angular-sanitize": "1.6.4",
+    "angular-block-ui": "^0.2.2"
   }
 }
