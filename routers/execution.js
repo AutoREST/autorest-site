@@ -126,4 +126,10 @@ router.generateApi = function(apiId, jsonPath, apiOptions, res, xmlPath) {
 		}
 	})
 }
+
+router.get('/java-version', function(req, res) {
+	executionCore.testJavaVersion(function(err, result) {
+		res.send({err:err, result:result});
+	})
+})
 module.exports = router;

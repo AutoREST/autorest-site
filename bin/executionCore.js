@@ -20,6 +20,24 @@ function ExecutionCore() {
 	var obj = this;
 	var logsEnabled = false;
 
+	this.testJavaVersion = function(cb) {
+		var command = "java -version";
+		var child = exec(command,
+				function(error, stdout, stderr) {
+					try {
+						if (error !== null) {
+							console.log(`Error -> \n${error}`);
+							cb(error);
+						}
+						else {
+							console.log(`Output -> \n${stdout}`);
+							cb(null, stdout);
+						}
+					} catch (e) {
+						cb(e);
+					}
+				});
+	};
 	this.executeAstaXmlParser = function(reqId, inputXML, cb) {
 		var outputFile = path.basename(inputXML, '.xml') + '.json';
 		outputFile = path.join(resultDirectory, outputFile);
@@ -30,10 +48,6 @@ function ExecutionCore() {
 						if (error !== null) {
 							if(logsEnabled) console.log(`Error -> \n${error}`);
 							cb(error);
-						}
-						else if (stderr) {
-							if(logsEnabled) console.log(`StdError -> \n${stderr}`);
-							cb(stderr);
 						}
 						else {
 							if(logsEnabled) console.log(`Output -> \n${stdout}`);
@@ -55,10 +69,6 @@ function ExecutionCore() {
 						if (error !== null) {
 							if(logsEnabled) console.log(`Error -> \n${error}`);
 							cb(error);
-						}
-						else if (stderr) {
-							if(logsEnabled) console.log(`StdError -> \n${stderr}`);
-							cb(stderr);
 						}
 						else {
 							if(logsEnabled) console.log(`Output -> \n${stdout}`);

@@ -3,7 +3,7 @@
     <groupId>autorest.generator</groupId>
     <artifactId>autorest-site</artifactId>
     <version>0.1.0</version>
-    <name>REST API Generator</name>
+    <name>AutoREST Site App</name>
     <url>https://github.com/AutoREST/autorest-site</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
