@@ -144,7 +144,8 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 				$scope.downloadURI(url, `${$scope.options.APIName}.zip`);
 			}
 			else {
-				$scope.$apply(function(){$scope.addAlert($scope.classes.error, xhr.response)});
+				console.log(xhr.response);
+				$scope.$apply(function(){$scope.addAlert($scope.classes.error, xhr.response.message)});
 			}
 			$scope.$apply(function(){blockUI.stop();});
 		};
