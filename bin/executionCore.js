@@ -47,6 +47,7 @@ function ExecutionCore() {
 		var outputFile = path.basename(inputXML, '.xml') + '.json';
 		outputFile = path.join(resultDirectory, outputFile);
 		var command = `java -jar ${parserJarPath} "${inputXML}" "${outputFile}"`;
+		console.log('Parsing a XML. Logs ' + (logsEnabled?'enabled':'disabled'));
 		var child = exec(command,
 				function(error, stdout, stderr) {
 					try {
@@ -69,6 +70,7 @@ function ExecutionCore() {
 		var errorRegex = /ERROR: ([\w\/\-\.\[\]\(\)]*)/;
 		inputOptions = inputOptions.replace(/"/g,'\\\"');
 		var command = `java -jar ${generatorJarPath} "${inputJSON}" "${inputOptions}"`;
+		console.log('Generating an API. Logs ' + (logsEnabled?'enabled':'disabled'));
 		var child = exec(command,
 				function(error, stdout, stderr) {
 					try {
