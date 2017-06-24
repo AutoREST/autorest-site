@@ -20,6 +20,11 @@ function ExecutionCore() {
 	var obj = this;
 	var logsEnabled = false;
 
+	this.toggleLogs = function() {
+		logsEnabled = !logsEnabled;
+		return logsEnabled;
+	}
+
 	this.testJavaVersion = function(cb) {
 		var command = "java -version";
 		var child = exec(command,
@@ -68,14 +73,13 @@ function ExecutionCore() {
 				function(error, stdout, stderr) {
 					try {
 						if (error !== null) {
-							if(!logsEnabled) console.log(`Error -> \n${error}`);
+							if(logsEnabled) console.log(`Error -> \n${error}`);
 							cb(error);
 						}
 						else {
-							if(!logsEnabled) console.log(`Output -> \n${stdout}`);
+							if(logsEnabled) console.log(`Output -> \n${stdout}`);
 							if(stdout.match(errorRegex)){
 								var errorMsg = stdout.replace(errorRegex, '$1');
-								console.log('ErrorMsg: ', errorMsg);
 								cb(errorMsg);
 							}
 							else if(stdout.match(outputRegex)){
@@ -87,7 +91,7 @@ function ExecutionCore() {
 								cb(null, newPath);
 							}
 							else {
-								console.log('Unknoe output:\n ', stdout);
+								console.log('Unknow output:\n ', stdout);
 								cb(stdout);
 							}
 						}

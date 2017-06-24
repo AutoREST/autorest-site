@@ -24,6 +24,11 @@ router.setStageFolder = function(folderPath) {
 	console.log(`Stage folder for generation: ${generationStage}`);
 };
 
+router.post('/toggle-logs', function(res, res) {
+	var logsEnabled = executionCore.toggleLogs();
+	res.send({logsEnabled: logsEnabled});
+})
+
 router.post('/generate', function(req, res){
 	//based on https://coligo.io/building-ajax-file-uploader-with-node/
 	// create an incoming form object
