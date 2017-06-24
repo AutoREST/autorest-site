@@ -107,7 +107,15 @@ router.post('/generate', function(req, res){
 router.parseXML = function(apiId, xmlPath, apiOptions, res) {
 	executionCore.executeAstaXmlParser(apiId, xmlPath, function(err, jsonPath) {
 		if(err) res.status(500).send({message:'Error parsing XML to JSON Schema', error:err});
-		else if(jsonPath) router.generateApi(apiId, jsonPath, apiOptions, res, xmlPath);
+		else if(jsonPath){
+			if(fs.existsSync(jsonPath))
+				router.generateApi(apiId, jsonPath, apiOptions, res, xmlPath);
+			else
+				res.status(500).send({message:'The parsed \'.json\' doesn\'t exist'});
+		}
+		else {
+			res.status(500).send({message:'Parser didn\'t return a \'.json\' path'});
+		}
 	})
 }
 
@@ -115,19 +123,26 @@ router.generateApi = function(apiId, jsonPath, apiOptions, res, xmlPath) {
 	executionCore.executeRestApiGenerator(apiId, jsonPath, apiOptions, function(err, zipPath) {
 		if(err) res.status(500).send({message:'Error generating API', error:err});
 		else if(zipPath){
-			var newOrder = new Order({
-				_id: apiId,
-				options: apiOptions,
-				APIName: JSON.parse(apiOptions).APIName,
-				zipPath: zipPath,
-				status: StatusEnum.GENERATED
-			});
-			if(xmlPath)
-				newOrder.xmlPath = xmlPath;
-			newOrder.save(function(err, result) {
-				if(err) res.status(500).send({message:'Error saving API',error:err});
-				else res.status(200).send({message:'API generated successfully', url:`/order/zip/${newOrder._id}`});
-			});
+			if(fs.existsSync(jsonPath)){
+				var newOrder = new Order({
+					_id: apiId,
+					options: apiOptions,
+					APIName: JSON.parse(apiOptions).APIName,
+					zipPath: zipPath,
+					status: StatusEnum.GENERATED
+				});
+				if(xmlPath)
+					newOrder.xmlPath = xmlPath;
+				newOrder.save(function(err, result) {
+					if(err) res.status(500).send({message:'Error saving API',error:err});
+					else res.status(200).send({message:'API generated successfully', url:`/order/zip/${newOrder._id}`});
+				});
+			}
+			else
+				res.status(500).send({message:'The generator \'.zip\' doesn\'t exist'});
+		}
+		else {
+			res.status(500).send({message:'Generator didn\'t return a \'.zip\' path'});
 		}
 	})
 }
