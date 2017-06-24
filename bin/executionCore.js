@@ -61,23 +61,35 @@ function ExecutionCore() {
 
 	this.executeRestApiGenerator = function(reqId, inputJSON, inputOptions, cb) {
 		var outputRegex = /API saved in: ([\w\/\-\.]*)/;
+		var errorRegex = /ERROR: ([\w\/\-\.\[\]\(\)]*)/;
 		inputOptions = inputOptions.replace(/"/g,'\\\"');
 		var command = `java -jar ${generatorJarPath} "${inputJSON}" "${inputOptions}"`;
 		var child = exec(command,
 				function(error, stdout, stderr) {
 					try {
 						if (error !== null) {
-							if(logsEnabled) console.log(`Error -> \n${error}`);
+							if(!logsEnabled) console.log(`Error -> \n${error}`);
 							cb(error);
 						}
 						else {
-							if(logsEnabled) console.log(`Output -> \n${stdout}`);
-							var apiPath = stdout.replace(outputRegex, '$1').replace('\n','');
-							var fileName = path.basename(apiPath, extName);
-							fileName = `${fileName}-${reqId}${extName}`;
-							var newPath = path.join(resultDirectory, fileName);
-							fs.moveSync(apiPath, newPath, {overwrite:true});
-							cb(null, newPath);
+							if(!logsEnabled) console.log(`Output -> \n${stdout}`);
+							if(stdout.match(errorRegex)){
+								var errorMsg = stdout.replace(errorRegex, '$1');
+								console.log('ErrorMsg: ', errorMsg);
+								cb(errorMsg);
+							}
+							else if(stdout.match(outputRegex)){
+								var apiPath = stdout.replace(outputRegex, '$1').replace('\n','');
+								var fileName = path.basename(apiPath, extName);
+								fileName = `${fileName}-${reqId}${extName}`;
+								var newPath = path.join(resultDirectory, fileName);
+								fs.moveSync(apiPath, newPath, {overwrite:true});
+								cb(null, newPath);
+							}
+							else {
+								console.log('Unknoe output:\n ', stdout);
+								cb(stdout);
+							}
 						}
 					} catch (e) {
 						cb(e);
