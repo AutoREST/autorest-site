@@ -6,7 +6,7 @@ var path = require('path');
 var buildDir = 'build/Release/';
 
 gulp.task('client', function() {
-	var stream = gulp.src(['./client/**/*.js'])
+	var stream = gulp.src(['./client/**/*.js', './client/**/*.css'])
 	.pipe(gulp.dest(buildDir));
 	return stream;
 });

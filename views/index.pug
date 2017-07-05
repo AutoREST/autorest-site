@@ -5,19 +5,23 @@ body(ng-app="modSiteApp" ng-controller="siteAppController")
 		form
 			div.form-group
 				label API Name
+				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The name of your API" id="helpName")
 				input.form-control(type="text" ng-model="options.APIName")
 			div.form-group
 				label Data Base name
+				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The name of the data base of your API" id="helpDbName")
 				input.form-control(type="text" ng-model="options.DataBaseName")
 			div.form-group
 				label API repository URL
+				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The URL that will be put in the 'repository' field of the file 'package.json'" id="helpRepo")
 				input.form-control(type="text" ng-model="options.APIRepoURL")
 			div.form-group
 				label Source File
+				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The Configuration Model (Asta XML project), or the JSON Schema, that will be used to generate your API " id="helpSourceF")
 				input(type="file" fileread="sourceFile")
 			//- button.btn.btn-success(ng-model="sendBtn" ng-click="createApiRequest()") Create API Request
 			button.btn.btn-success(ng-model="generateBtn" ng-click="generateApi()") Generate API
-			a.btn.btn-info(href="/order") All orders
+			//- a.btn.btn-info(href="/order") All orders
 		div.panel
 			div.alert.alert-dismissible(ng-class="alert.class" ng-repeat="alert in alerts track by $index")
 				button(type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert(alert)")

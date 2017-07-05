@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	console.log('Hi from ready');
+    $("[rel=tooltip]").tooltip({ placement: 'right'});
 })
 
 var _isSuccessCode = function(status) {
@@ -34,9 +35,10 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 	$scope.readyToSend = false;
 	$scope.classes = {info:'alert-info', error:'alert-danger', success:'alert-success'};
 	$scope.alerts = [];
-	$scope.addAlert = function(cls, msg, title) {
+	$scope.addAlert = function(cls, msg, title, details) {
 		var alert = {id:Math.random(),class:cls,text:msg};
 		alert.title = title || '';
+		alert.details = details || '';
 		$scope.alerts.push(alert);
 	}
 	$scope.removeAlert = function(alert) {
@@ -137,15 +139,15 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 		};
 
 		xhr.onload = () => {
+			var headers = $scope._parseHeaders(xhr.getAllResponseHeaders());
+			var response = $scope._transformResponse(xhr.response, headers);
 			if(_isSuccessCode(xhr.status)){
-				var headers = $scope._parseHeaders(xhr.getAllResponseHeaders());
-				var response = $scope._transformResponse(xhr.response, headers);
 				var url = $window.location.origin + response.url;
 				$scope.downloadURI(url, `${$scope.options.APIName}.zip`);
 			}
 			else {
-				console.log(xhr.response);
-				$scope.$apply(function(){$scope.addAlert($scope.classes.error, xhr.response.message)});
+				console.log(response);
+				$scope.$apply(function(){$scope.addAlert($scope.classes.error, response.message)});
 			}
 			$scope.$apply(function(){blockUI.stop();});
 		};

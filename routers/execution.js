@@ -43,6 +43,7 @@ router.post('/generate', function(req, res){
 	var sourceFilePath = '';
 	var apiOptions = '';
 	var apiId = uuid();
+	var errorMessage = undefined;
 	executionCore.setStageFolder(form.uploadDir);
 
 	// every time a file has been uploaded successfully,
@@ -61,6 +62,7 @@ router.post('/generate', function(req, res){
 		}
 		else {
 			status = StatusEnum.ERROR;
+			errorMessage = 'Invalid file. Only .xml and .json accepted.';
 		}
 		console.log(`status: ${status}`);
 		if(status != StatusEnum.ERROR)
@@ -82,6 +84,7 @@ router.post('/generate', function(req, res){
 	// log any errors that occur
 	form.on('error', function(err) {
 		status = StatusEnum.ERROR;
+		errorMessage = err;
 		console.log('An error has occured: \n' + err);
 	});
 
@@ -95,7 +98,7 @@ router.post('/generate', function(req, res){
 				router.generateApi(apiId, sourceFilePath, apiOptions, res);
 		}
 		else {
-			res.status(400).end('Failed to create API order in AutoREST');
+			res.status(400).send({message:'Failed to create API order in AutoREST', error:errorMessage});
 		}
 	});
 
