@@ -42,6 +42,7 @@ router.post('/generate', function(req, res){
 	var status = StatusEnum.NOTPARSED;
 	var sourceFilePath = '';
 	var apiOptions = '';
+	var selectedPackage = undefined;
 	var apiId = uuid();
 	var errorMessage = undefined;
 	executionCore.setStageFolder(form.uploadDir);
@@ -76,6 +77,9 @@ router.post('/generate', function(req, res){
 			var opts = JSON.parse(value);
 			apiOptions = JSON.stringify(opts);
 		}
+		if (field === 'selectedPackage') {
+			selectedPackage = value;
+		}
 		else {
 			console.log(`unexpected field: ${field}`);
 		}
@@ -92,8 +96,12 @@ router.post('/generate', function(req, res){
 	form.on('end', function() {
 		console.log('Upload completed');
 		if(status != StatusEnum.ERROR){
-			if(status === StatusEnum.NOTPARSED)
-				router.parseXML(apiId, sourceFilePath, apiOptions, res);
+			if(status === StatusEnum.NOTPARSED){
+				if(selectedPackage)
+					router.parseXML(apiId, sourceFilePath, selectedPackage, apiOptions, res);
+				else
+					router.listPackages(apiId, sourceFilePath, apiOptions, res);
+			}
 			else if (status === StatusEnum.PARSED)
 				router.generateApi(apiId, sourceFilePath, apiOptions, res);
 		}
@@ -107,8 +115,20 @@ router.post('/generate', function(req, res){
 
 });
 
-router.parseXML = function(apiId, xmlPath, apiOptions, res) {
-	executionCore.executeAstaXmlParser(apiId, xmlPath, function(err, jsonPath) {
+router.listPackages = function(apiId, xmlPath, apiOptions, res) {
+	executionCore.astahXmlParserGetPackages(apiId, xmlPath, function(err, packagesOut) {
+		if(err) res.status(500).send({message:'Error extracting packages.', error:err});
+		else if(packagesOut){
+			res.status(200).send({message:'Select a package from the list', packages:packagesOut.packages});
+		}
+		else {
+			res.status(500).send({message:'Parser didn\'t return a list of packages'});
+		}
+	})
+}
+
+router.parseXML = function(apiId, xmlPath, selectedPackage, apiOptions, res) {
+	executionCore.executeAstahXmlParser(apiId, xmlPath, selectedPackage, function(err, jsonPath) {
 		if(err) res.status(500).send({message:'Error parsing XML to JSON Schema', error:err});
 		else if(jsonPath){
 			if(fs.existsSync(jsonPath))
