@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	console.log('Hi from ready');
-    $("[rel=tooltip]").tooltip({ placement: 'right'});
+	$("[rel=tooltip]").tooltip({ placement: 'right'});
 })
 
 var _isSuccessCode = function(status) {
@@ -8,23 +8,21 @@ var _isSuccessCode = function(status) {
 }
 
 var app = angular.module('modSiteApp', ['ngSanitize', 'blockUI'])
-	.directive("fileread", [function () {
-	//big thanks to: https://stackoverflow.com/questions/17063000/ng-model-for-input-type-file
-	return {
-		scope: {
-			fileread: "="
+	.directive("ngUploadChange",function(){
+	return{
+		scope:{
+			ngUploadChange:"&"
 		},
-		link: function (scope, element, attributes) {
-			element.bind("change", function (changeEvent) {
-				scope.$apply(function () {
-					scope.fileread = changeEvent.target.files[0];
-					// or all selected files:
-					// scope.fileread = changeEvent.target.files;
-				});
+		link:function($scope, $element, $attrs){
+			$element.on("change",function(event){
+				$scope.ngUploadChange({$event: event});
+			});
+			$scope.$on("$destroy",function(){
+				$element.off();
 			});
 		}
 	}
-}]);;
+});
 
 app.controller('siteAppController', function ($scope, $timeout, $http, $window, blockUI) {
 	$scope.options = {
@@ -32,9 +30,21 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 		DataBaseName: 'apiDB',
 		APIRepoURL: 'www.github.com'
 	};
+	$scope.selectedPackage = undefined;
+	$scope.showPackages = false;
+	$scope.availablePackages = undefined;
 	$scope.readyToSend = false;
 	$scope.classes = {info:'alert-info', error:'alert-danger', success:'alert-success'};
 	$scope.alerts = [];
+	$scope.fileChanged = function($event){
+		var files = $event.target.files;
+		$scope.$apply(function() {
+			$scope.sourceFile = files[0];
+			$scope.selectedPackage = undefined;
+			$scope.showPackages = false;
+			$scope.availablePackages = undefined;
+		});
+	};
 	$scope.addAlert = function(cls, msg, title, details) {
 		var alert = {id:Math.random(),class:cls,text:msg};
 		alert.title = title || '';
@@ -131,6 +141,9 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 			return;
 		}
 		sendable.append('options', JSON.stringify($scope.options));
+		if($scope.selectedPackage){
+			sendable.append('selectedPackage', JSON.stringify($scope.selectedPackage));
+		}
 		sendable.append(item.alias, item.file, item.file.name);
 
 		xhr.upload.onprogress = (event) => {
@@ -142,8 +155,15 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 			var headers = $scope._parseHeaders(xhr.getAllResponseHeaders());
 			var response = $scope._transformResponse(xhr.response, headers);
 			if(_isSuccessCode(xhr.status)){
-				var url = $window.location.origin + response.url;
-				$scope.downloadURI(url, `${$scope.options.APIName}.zip`);
+				if(response.url){
+					var url = $window.location.origin + response.url;
+					$scope.downloadURI(url, `${$scope.options.APIName}.zip`);
+				}
+				else{
+					$scope.availablePackages = response.packages;
+					$scope.showPackages = true;
+					$('#myModal').modal('show');
+				}
 			}
 			else {
 				console.log(response);

@@ -18,7 +18,13 @@ body(ng-app="modSiteApp" ng-controller="siteAppController")
 			div.form-group
 				label Source File
 				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The Configuration Model (Asta XML project), or the JSON Schema, that will be used to generate your API " id="helpSourceF")
-				input(type="file" fileread="sourceFile")
+				input(type="file" ng-upload-change="fileChanged($event)")
+			div.form-group(ng-hide="!showPackages")
+				label Package
+				i.glyphicon.glyphicon-question-sign(rel="tooltip" title="The packages available for you to select" id="helpPacks")
+				br
+				select(ng-model="selectedPackage")
+					option(ng-repeat="package in availablePackages" value="{{package}}") {{package}}
 			//- button.btn.btn-success(ng-model="sendBtn" ng-click="createApiRequest()") Create API Request
 			button.btn.btn-success(ng-model="generateBtn" ng-click="generateApi()") Generate API
 			//- a.btn.btn-info(href="/order") All orders
@@ -28,3 +34,13 @@ body(ng-app="modSiteApp" ng-controller="siteAppController")
 					span(aria-hidden="true") &times;
 				strong {{alert.title}} &nbsp;
 				span(ng-bind-html="alert.text")
+		div.modal.fade(id="myModal" role="dialog")
+			div.modal-dialog
+				div.modal-content
+					//- div.modal-header
+					//- 	button.close(type="button" data-dismiss="modal") &times;
+					//- 	h4.modal-title Modal Header
+					div.modal-body
+						p Please select a package
+					div.modal-footer
+						button.btn.btn-default(type="button" data-dismiss="modal") Ok

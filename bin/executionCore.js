@@ -43,11 +43,53 @@ function ExecutionCore() {
 					}
 				});
 	};
-	this.executeAstaXmlParser = function(reqId, inputXML, cb) {
+
+	this.astahXmlParserGetPackages = function(reqId, inputXML, cb) {
+		var outputRegex = /PACKAGES: (\[[\ +\'\,\w\/\-\.]*\])/;
+		var errorRegex = /([\w\/\-\.\[\]\(\)]*)ERROR: ([\ \w\/\-\.\[\]\(\)]*)/;
+		var command = `java -jar ${parserJarPath} "${inputXML}"`;
+		console.log('Parsing a XML. Logs ' + (logsEnabled?'enabled':'disabled'));
+		var child = exec(command,
+				function(error, stdout, stderr) {
+					try {
+						if (error !== null) {
+							if(logsEnabled) console.log(`Error -> \n${error}`);
+							cb(error);
+						}
+						else {
+							if(logsEnabled) console.log(`stderr -> \n${stderr}`);
+							if(logsEnabled) console.log(`Output -> \n${stdout}`);
+							if(stdout.match(errorRegex)){
+								if(logsEnabled) console.log(`error`);
+								var errorMsg = stderr + '\n'+ stdout.replace(errorRegex, '$1');
+								cb(errorMsg);
+							}
+							else if(stdout.match(outputRegex)){
+								var packagesOut = JSON.parse('{"packages":'+stdout.match(outputRegex)[1].replace(/'/g,'"')+'}');
+								if(logsEnabled){
+									console.log(`output`);
+									console.log('match:',stdout.match(outputRegex));
+									console.log('match [1]',stdout.match(outputRegex)[1]);
+									console.log('match replace',stdout.match(outputRegex)[1].replace(/'/g,'"'));
+									console.log('packagesOut: ', packagesOut);
+								}
+								cb(null, packagesOut);
+							}
+							else {
+								console.log('Unknow output:\n ', stdout);
+								cb(stdout);
+							}
+						}
+					} catch (e) {
+						cb(e);
+					}
+				});
+	};
+
+	this.executeAstahXmlParser = function(reqId, inputXML, packageName, cb) {
 		var errorRegex = /([\w\/\-\.\[\]\(\)]*)ERROR: ([\ \w\/\-\.\[\]\(\)]*)/;
 		var outputFile = path.basename(inputXML, '.xml') + '.json';
 		outputFile = path.join(resultDirectory, outputFile);
-		var packageName = 'pack1';
 		var command = `java -jar ${parserJarPath} "${inputXML}" "${outputFile}" "${packageName}"`;
 		console.log('Parsing a XML. Logs ' + (logsEnabled?'enabled':'disabled'));
 		var child = exec(command,
@@ -131,7 +173,7 @@ function ExecutionCore() {
 				if (orders && orders.length > 0) {
 					for (var order of orders) {
 						pending++;
-						obj.executeAstaXmlParser(order._id, order.xmlPath, function(err, result) {
+						obj.executeAstahXmlParser(order._id, order.xmlPath, 'pack1', function(err, result) {
 							if(err) console.error(err);
 							else if(result){
 								if(logsEnabled) console.log(result);
