@@ -1,4 +1,5 @@
 var express = require('express');
+var favicon = require('serve-favicon');
 var uuid = require('uuid/v4');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -45,6 +46,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname,'build','Release')));
+app.use(favicon(path.join(__dirname,'favicon.ico')));
 app.use(order);
 app.use(execution);
 app.get('/', function (req, res) {

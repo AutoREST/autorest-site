@@ -44,9 +44,11 @@ function ExecutionCore() {
 				});
 	};
 	this.executeAstaXmlParser = function(reqId, inputXML, cb) {
+		var errorRegex = /([\w\/\-\.\[\]\(\)]*)ERROR: ([\ \w\/\-\.\[\]\(\)]*)/;
 		var outputFile = path.basename(inputXML, '.xml') + '.json';
 		outputFile = path.join(resultDirectory, outputFile);
-		var command = `java -jar ${parserJarPath} "${inputXML}" "${outputFile}"`;
+		var packageName = 'pack1';
+		var command = `java -jar ${parserJarPath} "${inputXML}" "${outputFile}" "${packageName}"`;
 		console.log('Parsing a XML. Logs ' + (logsEnabled?'enabled':'disabled'));
 		var child = exec(command,
 				function(error, stdout, stderr) {
@@ -56,8 +58,15 @@ function ExecutionCore() {
 							cb(error);
 						}
 						else {
+							if(logsEnabled) console.log(`stderr -> \n${stderr}`);
 							if(logsEnabled) console.log(`Output -> \n${stdout}`);
-							cb(null, outputFile);
+							if(stdout.match(errorRegex)){
+								var errorMsg = stderr + '\n'+ stdout.replace(errorRegex, '$1');
+								cb(errorMsg);
+							}
+							else {
+								cb(null, outputFile);
+							}
 						}
 					} catch (e) {
 						cb(e);
