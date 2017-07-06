@@ -132,18 +132,21 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 	// A function called from user interface, which performs an async operation.
 	$scope.generateApiBlock = function(item) {
 		// Block the user interface
-		blockUI.start('Generating your API');
+		var sendable = new FormData();
+		if($scope.selectedPackage){
+			sendable.append('selectedPackage', JSON.stringify($scope.selectedPackage));
+			blockUI.start('Generating your API');
+		}
+		else {
+			blockUI.start('Extracting the names of the available packages');
+		}
 		//this function was heavily based on one in angular-file-upload
 		var xhr = new XMLHttpRequest();
-		var sendable = new FormData();
 		if(typeof(item.file.size) != 'number') {
 			$scope.addAlert($scope.classes.error, 'The file specified is no longer valid');
 			return;
 		}
 		sendable.append('options', JSON.stringify($scope.options));
-		if($scope.selectedPackage){
-			sendable.append('selectedPackage', JSON.stringify($scope.selectedPackage));
-		}
 		sendable.append(item.alias, item.file, item.file.name);
 
 		xhr.upload.onprogress = (event) => {
