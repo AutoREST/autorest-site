@@ -1,0 +1,31 @@
+include basic.pug
+body(ng-app="modSiteApp" ng-controller="samplesController")
+	div.container
+		h2 Samples
+		table.table.table-striped
+			tr
+				th Name
+				th XML
+				th JSON Schema
+				th &nbsp;
+			each sample in samples
+				tr
+					td #{sample.name}
+					td
+						- url = `/assets/samples/${sample.xml}`
+						- fileName = sample.xml
+						a.btn.btn-success(href=url,download=fileName) Download
+					td
+						- url = `/assets/samples/${sample.json}`
+						- fileName = sample.json
+						a.btn.btn-success(href=url,download=fileName) Download
+					td
+						- url = `previewSample('/assets/samples/${sample.png}')`
+						button.btn.btn-info(ng-click=url) Image preview
+		div.modal.fade(id="myModal" role="dialog")
+			div.modal-dialog
+				div.modal-content
+					div.modal-body
+						img(ng-src="{{previewImg}}")
+					div.modal-footer
+						button.btn.btn-default(type="button" data-dismiss="modal") Ok

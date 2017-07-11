@@ -1,3 +1,11 @@
 i.glyphicon.glyphicon-question-sign{
 	padding-left: 10px;
 }
+.modal-content{
+    display:inline-block;
+}
+.modal-dialog {
+    text-align:center;
+    width: auto;
+    max-width: 90%;
+}

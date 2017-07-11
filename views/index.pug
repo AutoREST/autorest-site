@@ -28,6 +28,7 @@ body(ng-app="modSiteApp" ng-controller="siteAppController")
 			//- button.btn.btn-success(ng-model="sendBtn" ng-click="createApiRequest()") Create API Request
 			button.btn.btn-success(ng-model="generateBtn" ng-click="generateApi()") Generate API
 			//- a.btn.btn-info(href="/order") All orders
+			a.btn.btn-info(style="margin-left: 10px;" href="/samples") Samples
 		div.panel
 			div.alert.alert-dismissible(ng-class="alert.class" ng-repeat="alert in alerts track by $index")
 				button(type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert(alert)")

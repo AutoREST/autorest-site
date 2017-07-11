@@ -1,0 +1,77 @@
+{
+	"definitions": {
+		"Class1": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute2": {
+					"type": "integer"
+				},
+				"Class1_created_identifier": {
+					"type": "integer"
+				},
+				"Class3": {
+					"$ref": "#/definitions/Class3/properties/attribute4"
+				},
+				"Class0": {
+					"$ref": "#/definitions/Class0/properties/attribute0"
+				}
+			},
+			"dependencies": {
+				"Class3": [ "Class1_created_identifier"],
+				"Class0": [ "Class1_created_identifier"],
+				"attribute2": [ "Class1_created_identifier"]
+			},
+			"required": [ "Class1_created_identifier", "attribute2", "Class0" ]
+		},
+		"Class0": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute0": {
+					"type": "integer"
+				},
+				"attribute1": {
+					"type": "integer"
+				},
+				"Class1": {
+					"$ref": "#/definitions/Class1/properties/Class1_created_identifier"
+				}
+			},
+			"dependencies": {
+				"Class1": [ "attribute0"],
+				"attribute1": [ "attribute0"]
+			},
+			"required": [ "attribute0", "attribute1" ]
+		},
+		"Class3": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute4": {
+					"type": "integer"
+				}
+			},
+			"required": [ "attribute4" ]
+		},
+		"Class2": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute3": {
+					"type": "integer"
+				},
+				"Class3s": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Class3/properties/attribute4"
+						}
+				}
+			},
+			"dependencies": {
+				"Class3s": [ "attribute3"]
+			},
+			"required": [ "attribute3", "Class3s" ]
+		}
+	}
+}

@@ -1,0 +1,169 @@
+{
+	"definitions": {
+		"Mestre": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"Professor" : {
+					"$ref" : "#/definitions/Professor"
+				}
+			}
+		},
+		"Disciplina": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"codCred": {
+					"type": "integer"
+				},
+				"nome": {
+					"type": "string"
+				},
+				"Conteudo": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"titulo": {
+							"type": "string"
+						},
+						"descricao": {
+							"type": "string"
+						},
+						"Conteudo_created_identifier": {
+							"type": "integer"
+						}
+					},
+					"dependencies": {
+						"titulo": [ "Conteudo_created_identifier"],
+						"descricao": [ "Conteudo_created_identifier"]
+					},
+					"required": [ "Conteudo_created_identifier", "titulo" ]
+				}
+			},
+			"dependencies": {
+				"Conteudo": [ "codCred"],
+				"nome": [ "codCred"]
+			},
+			"required": [ "codCred", "nome" ]
+		},
+		"Turma": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"numTurma": {
+					"type": "integer"
+				},
+				"semestre": {
+					"type": "integer"
+				},
+				"horario": {
+					"type": "integer"
+				},
+				"Disciplina": {
+					"$ref": "#/definitions/Disciplina/properties/codCred"
+				},
+				"Professor": {
+					"$ref": "#/definitions/Professor/properties/matriculaProfessor"
+				},
+				"Alunos": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Aluno/properties/matriculaAluno"
+						}
+				}
+			},
+			"dependencies": {
+				"Disciplina": [ "numTurma"],
+				"Professor": [ "numTurma"],
+				"Alunos": [ "numTurma"],
+				"semestre": [ "numTurma"],
+				"horario": [ "numTurma"]
+			},
+			"required": [ "numTurma", "semestre", "horario", "Disciplina", "Professor" ]
+		},
+		"Professor": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"matriculaProfessor": {
+					"type": "integer"
+				},
+				"nome": {
+					"type": "string"
+				},
+				"Turmas": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Turma/properties/numTurma"
+						}
+				}
+			},
+			"dependencies": {
+				"Turmas": [ "matriculaProfessor"],
+				"nome": [ "matriculaProfessor"]
+			},
+			"required": [ "matriculaProfessor", "nome" ]
+		},
+		"Especialista": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"Professor" : {
+					"$ref" : "#/definitions/Professor"
+				}
+			}
+		},
+		"Doutor": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"Professor" : {
+					"$ref" : "#/definitions/Professor"
+				}
+			}
+		},
+		"Aluno": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"matriculaAluno": {
+					"type": "integer"
+				},
+				"nome": {
+					"type": "string"
+				}
+			},
+			"dependencies": {
+				"nome": [ "matriculaAluno"]
+			},
+			"required": [ "matriculaAluno", "nome" ]
+		},
+		"Avaliacao": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"notaG1": {
+					"type": "integer"
+				},
+				"notaG2": {
+					"type": "integer"
+				},
+				"faltas": {
+					"type": "integer"
+				},
+				"TurmaID": {
+					"$ref": "#/definitions/Turma/properties/numTurma"
+				},
+				"AlunoID": {
+					"$ref": "#/definitions/Aluno/properties/matriculaAluno"
+				}
+			},
+			"dependencies": {
+				"notaG1": [ "TurmaID", "AlunoID"],
+				"notaG2": [ "TurmaID", "AlunoID"],
+				"faltas": [ "TurmaID", "AlunoID"]
+			},
+			"required": [ "TurmaID", "AlunoID", "notaG1", "faltas" ]
+		}
+	}
+}

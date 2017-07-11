@@ -46,11 +46,22 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname,'build','Release')));
+app.use('/assets/samples', express.static(path.join(__dirname,'samples')));
 app.use(favicon(path.join(__dirname,'favicon.ico')));
 app.use(order);
 app.use(execution);
 app.get('/', function (req, res) {
 	res.render('index');
+});
+app.get('/samples', function (req, res) {
+	var samples = [];
+	samples.push({name:'ClassDiagram2', xml:'ClassDiagram2.xml', json:'ClassDiagram2.json', png:'ClassDiagram2.png'});
+	samples.push({name:'ClassDiagram3', xml:'ClassDiagram3.xml', json:'ClassDiagram3.json', png:'ClassDiagram3.png'});
+	samples.push({name:'ClassDiagram4', xml:'ClassDiagram4.xml', json:'ClassDiagram4.json', png:'ClassDiagram4.png'});
+	samples.push({name:'ClassDiagram5', xml:'ClassDiagram5.xml', json:'ClassDiagram5.json', png:'ClassDiagram5.png'});
+	samples.push({name:'ClassDiagram6', xml:'ClassDiagram6.xml', json:'ClassDiagram6.json', png:'ClassDiagram6.png'});
+	samples.push({name:'RunningExample', xml:'RunningExample.xml', json:'RunningExample.json', png:'RunningExample.png'});
+	res.render('samples',{samples: samples});
 });
 /*
 var executionCore = require('./bin/executionCore');

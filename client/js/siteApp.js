@@ -1,6 +1,13 @@
 $(document).ready(function() {
 	console.log('Hi from ready');
 	$("[rel=tooltip]").tooltip({ placement: 'right'});
+	$('#myModal').on('show.bs.modal', function () {
+       $(this).find('.modal-body').css({
+              width:'auto', //probably not needed
+              height:'auto', //probably not needed
+              'max-height':'100%'
+       });
+});
 })
 
 var _isSuccessCode = function(status) {
@@ -226,6 +233,12 @@ app.controller('siteAppController', function ($scope, $timeout, $http, $window, 
 
 app.controller('ordersController', function ($scope) {
 
+});
+app.controller('samplesController', function ($scope) {
+	$scope.previewSample = function(imgSrc) {
+		$scope.previewImg = imgSrc;
+		$('#myModal').modal('show');
+	}
 });
 app.controller('orderController', function ($scope) {
 

@@ -1,0 +1,66 @@
+{
+	"definitions": {
+		"Example_Class": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute0": {
+					"type": "integer"
+				},
+				"attribute1": {
+					"type": "boolean"
+				},
+				"attribute2": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 255
+				},
+				"attribute3": {
+					"type": "string",
+					"maxLength": 1
+				},
+				"attribute4": {
+					"type": "number"
+				},
+				"attribute5": {
+					"type": "number"
+				},
+				"attribute6": {
+					"type": "integer"
+				},
+				"attribute7": {
+					"type": "integer"
+				},
+				"attribute8": {
+					"type": "array",
+					"items":{
+						"type": "integer"
+					}
+				},
+				"attribute9": {
+					"type": "string"
+				},
+				"attribute10": {
+					"type": "object"
+				},
+				"attribute11": {
+					"type": "string"
+				}
+			},
+			"dependencies": {
+				"attribute1": [ "attribute0"],
+				"attribute2": [ "attribute0"],
+				"attribute3": [ "attribute0"],
+				"attribute4": [ "attribute0"],
+				"attribute5": [ "attribute0"],
+				"attribute6": [ "attribute0"],
+				"attribute7": [ "attribute0"],
+				"attribute8": [ "attribute0"],
+				"attribute9": [ "attribute0"],
+				"attribute10": [ "attribute0"],
+				"attribute11": [ "attribute0"]
+			},
+			"required": [ "attribute0", "attribute1", "attribute3", "attribute4", "attribute5", "attribute6", "attribute7", "attribute9", "attribute10", "attribute11" ]
+		}
+	}
+}

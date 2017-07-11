@@ -1,0 +1,47 @@
+{
+	"definitions": {
+		"Class14": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute1": {
+					"type": "integer"
+				}
+			},
+			"required": [ "attribute1" ]
+		},
+		"Class13": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute0": {
+					"type": "integer"
+				}
+			},
+			"required": [ "attribute0" ]
+		},
+		"AssociationClass0": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"attribute2": {
+					"type": "integer"
+				},
+				"attribute3": {
+					"type": "integer"
+				},
+				"Class13ID": {
+					"$ref": "#/definitions/Class13/properties/attribute0"
+				},
+				"Class14ID": {
+					"$ref": "#/definitions/Class14/properties/attribute1"
+				}
+			},
+			"dependencies": {
+				"attribute2": [ "Class13ID", "Class14ID"],
+				"attribute3": [ "Class13ID", "Class14ID"]
+			},
+			"required": [ "Class13ID", "Class14ID", "attribute2", "attribute3" ]
+		}
+	}
+}
